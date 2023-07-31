@@ -1,5 +1,6 @@
 package com.beyzakececi.bookdiarykotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -17,13 +18,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
+        val menuInflater = menuInflater
         menuInflater.inflate(R.menu.book_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.add_book_item){
+            val intent = Intent(this@MainActivity,BookActivity::class.java)
+            startActivity(intent)
+        }
         return super.onOptionsItemSelected(item)
     }
 }

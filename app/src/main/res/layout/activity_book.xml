@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".BookActivity">
 
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="241dp"
         android:layout_height="193dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:onClick="selectImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,52 +20,50 @@
 
     <EditText
         android:id="@+id/pageCount"
-        android:layout_width="352dp"
-        android:layout_height="47dp"
+        android:layout_width="309dp"
+        android:layout_height="54dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Page Count"
         android:inputType="text"
-        android:textColorHint="@color/material_dynamic_neutral60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorName" />
+        app:layout_constraintTop_toBottomOf="@+id/authorName3" />
 
     <EditText
-        android:id="@+id/authorName"
-        android:layout_width="352dp"
-        android:layout_height="47dp"
+        android:id="@+id/authorName3"
+        android:layout_width="309dp"
+        android:layout_height="54dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Author"
         android:inputType="text"
-        android:textColorHint="@color/material_dynamic_neutral60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bookName" />
 
     <EditText
         android:id="@+id/bookName"
-        android:layout_width="352dp"
-        android:layout_height="47dp"
+        android:layout_width="309dp"
+        android:layout_height="54dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Book Name"
         android:inputType="text"
-        android:textColorHint="@color/material_dynamic_neutral60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="117dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="127dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="35dp"
         android:onClick="saveButtonClicked"
-        android:text="SAVE"
+        android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pageCount" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
