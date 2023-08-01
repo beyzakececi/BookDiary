@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.beyzakececi.bookdiarykotlin.databinding.ActivityBookBinding
 import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayOutputStream
 
 class BookActivity : AppCompatActivity() {
 
@@ -40,6 +41,31 @@ class BookActivity : AppCompatActivity() {
 
         if(selectedBitmap != null){
             val smallBitmap = makeSmallerBitmap(selectedBitmap!!,300)
+
+            //convert image to bytearray
+            val outputStream = ByteArrayOutputStream()
+            smallBitmap.compress(Bitmap.CompressFormat.PNG,50,outputStream)
+            val byteArray = outputStream.toByteArray()
+
+            try {
+                val database = this.openOrCreateDatabase("Books", MODE_PRIVATE, null)
+                database.execSQL("CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY, bookname VARCHAR, authorname VARCHAR, pagecount VARCHAR, image BLOB)")
+                val sqlString = "INSERT INTO books (bookname, authorname, pagecount, image) VALUES (?, ?, ?, ?)"
+                val statement = database.compileStatement(sqlString)
+                statement.bindString(1, bookName)
+                statement.bindString(2, bookAuthor)
+                statement.bindString(3, pageCount)
+                statement.bindBlob(4, byteArray)
+                statement.execute()
+
+
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+
+            val intent = Intent(this@BookActivity,MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // clear all activities on top of main activity
+            startActivity(intent)
         }
 
     }
