@@ -22,6 +22,7 @@ class BookAdapter(val bookList: ArrayList<Book>) : RecyclerView.Adapter<BookAdap
         holder.binding.recyclerViewTextView.text = bookList[position].name
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context,BookActivity::class.java)
+            intent.putExtra("info","old")
             intent.putExtra("bookId",bookList[position].id)
             holder.itemView.context.startActivity(intent)
         }

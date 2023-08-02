@@ -1,7 +1,9 @@
 package com.beyzakececi.bookdiarykotlin
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +25,7 @@ class BookActivity : AppCompatActivity() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     var selectedBitmap : Bitmap? = null
+    private lateinit var database : SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +33,45 @@ class BookActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        database = this.openOrCreateDatabase("Books", MODE_PRIVATE, null)
+
         registerLauncher()
 
+        val intent = intent
+        val info = intent.getStringExtra("info")
+
+        if (info.equals("new")){
+            //new book
+            binding.bookName.setText("")
+            binding.authorName3.setText("")
+            binding.pageCount.setText("")
+            binding.saveButton.visibility = View.VISIBLE
+
+            val selectedImageBackground = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.select_image)
+            binding.imageView.setImageBitmap(selectedImageBackground)
+
+        }else{
+            //old book
+            binding.saveButton.visibility = View.INVISIBLE
+            val selectedId = intent.getIntExtra("id",1)
+            val cursor = database.rawQuery("SELECT * FROM books WHERE id = ?", arrayOf(selectedId.toString()))
+            val bookNameIx = cursor.getColumnIndex("bookname")
+            val authorNameIx = cursor.getColumnIndex("authorname")
+            val pageCountIx = cursor.getColumnIndex("pagecount")
+            val imageIx = cursor.getColumnIndex("image")
+
+            while (cursor.moveToNext()){
+                binding.bookName.setText(cursor.getString(bookNameIx))
+                binding.authorName3.setText(cursor.getString(authorNameIx))
+                binding.pageCount.setText(cursor.getString(pageCountIx))
+
+                val byteArray = cursor.getBlob(imageIx)
+                val bitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
+                binding.imageView.setImageBitmap(bitmap)
+            }
+            cursor.close()
+
+        }
     }
 
     fun saveButtonClicked(view : View){
@@ -48,7 +88,6 @@ class BookActivity : AppCompatActivity() {
             val byteArray = outputStream.toByteArray()
 
             try {
-                val database = this.openOrCreateDatabase("Books", MODE_PRIVATE, null)
                 database.execSQL("CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY, bookname VARCHAR, authorname VARCHAR, pagecount VARCHAR, image BLOB)")
                 val sqlString = "INSERT INTO books (bookname, authorname, pagecount, image) VALUES (?, ?, ?, ?)"
                 val statement = database.compileStatement(sqlString)
